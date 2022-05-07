@@ -1,15 +1,34 @@
+:root {
+	--grid-cols: '';
+	--grid-rows: '';
+}
+
 html {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-size: 62.5%;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	font-size: 62.5%;
 }
 *,
 *::before,
 *::after {
-  box-sizing: inherit;
+	box-sizing: inherit;
 }
 
 .body {
-  font-size: 1rem;
+	font-size: 1rem;
+}
+
+.gameBoard {
+	width: 500px;
+	height: 500px;
+	border: 1px solid black;
+	display: grid;
+	grid-template-columns: repeat(var(--grid-cols), 1fr);
+	grid-template-rows: repeat(var(--grid-rows), 1fr);
+}
+
+.gameCell {
+	border: 1px solid rebeccapurple;
+	background-color: antiquewhite;
 }
