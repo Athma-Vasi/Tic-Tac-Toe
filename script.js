@@ -72,6 +72,8 @@ const mainApp = function () {
                                 gameCell.setAttribute('data-key', `${i},${j}`);
                             }
                             gameCell.addEventListener('click', handleCellClick);
+                            if (winnerGlobal)
+                                gameCell.removeEventListener('click', handleCellClick);
                         }
                     }
                     //
@@ -83,13 +85,16 @@ const mainApp = function () {
                         var _a;
                         const cellKey = (_a = this.dataset.key) !== null && _a !== void 0 ? _a : '';
                         let winner = '';
+                        let getWinner = '';
                         renderMove(cellKey, player1, player2);
-                        const getWinner = checkWin(cellKey, scoreMap, cellsDataKeyPlayer1, cellsDataKeyPlayer2, player1Turn, player2Turn);
+                        if (!winnerGlobal) {
+                            getWinner = checkWin(cellKey, scoreMap, cellsDataKeyPlayer1, cellsDataKeyPlayer2, player1Turn, player2Turn);
+                        }
                         if (getWinner === player1.symbol)
-                            winner = 'Player 1';
+                            winner = `${player1.name}`;
                         if (getWinner === player2.symbol)
-                            winner = 'Player 2';
-                        log(winner);
+                            winner = `${player2.name}`;
+                        log(getWinner);
                         if (winnerGlobal)
                             announceWinner(winner);
                     }
@@ -180,7 +185,10 @@ const mainApp = function () {
                     function announceWinner(winner_) {
                         const announceH2 = document.querySelector('.announce-winner');
                         if (announceH2)
-                            announceH2.textContent = `Congrats! ${winner_} wins!`;
+                            announceH2.textContent =
+                                winner_ === ''
+                                    ? 'Click Restart to play again!'
+                                    : `Congrats! ${winner_} wins!`;
                     }
                 })();
                 //

@@ -100,6 +100,7 @@ const mainApp = function () {
 							}
 
 							gameCell.addEventListener('click', handleCellClick)
+							if (winnerGlobal) gameCell.removeEventListener('click', handleCellClick)
 						}
 					}
 
@@ -112,22 +113,25 @@ const mainApp = function () {
 					function handleCellClick(this: HTMLDivElement) {
 						const cellKey = this.dataset.key ?? ''
 						let winner = ''
+						let getWinner = ''
 
 						renderMove(cellKey, player1, player2)
 
-						const getWinner = checkWin(
-							cellKey,
-							scoreMap,
-							cellsDataKeyPlayer1,
-							cellsDataKeyPlayer2,
-							player1Turn,
-							player2Turn
-						)
-						if (getWinner === player1.symbol) winner = 'Player 1'
-						if (getWinner === player2.symbol) winner = 'Player 2'
+						if (!winnerGlobal) {
+							getWinner = checkWin(
+								cellKey,
+								scoreMap,
+								cellsDataKeyPlayer1,
+								cellsDataKeyPlayer2,
+								player1Turn,
+								player2Turn
+							)
+						}
 
-						log(winner)
+						if (getWinner === player1.symbol) winner = `${player1.name}`
+						if (getWinner === player2.symbol) winner = `${player2.name}`
 
+						log(getWinner)
 						if (winnerGlobal) announceWinner(winner)
 					}
 
@@ -242,7 +246,11 @@ const mainApp = function () {
 
 					function announceWinner(winner_: string) {
 						const announceH2: H2 = document.querySelector('.announce-winner')
-						if (announceH2) announceH2.textContent = `Congrats! ${winner_} wins!`
+						if (announceH2)
+							announceH2.textContent =
+								winner_ === ''
+									? 'Click Restart to play again!'
+									: `Congrats! ${winner_} wins!`
 					}
 				})()
 				//
