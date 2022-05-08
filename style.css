@@ -86,12 +86,12 @@ input:active {
 
 #player1,
 #player2 {
-	width: 25rem;
+	width: 27rem;
 }
 
 #player1Symbol,
 #player2Symbol {
-	width: 15rem;
+	width: 17rem;
 }
 
 .bttn {
