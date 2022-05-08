@@ -1,41 +1,9 @@
 "use strict";
 const mainApp = function () {
-    const log = (i) => console.log('\n', i);
-    //
-    const clearBoard = (function () {
-        const clearBttn = document.querySelector('.bttn-clear');
-        function handleClearBttn() {
-            window.location.reload();
-        }
-        clearBttn === null || clearBttn === void 0 ? void 0 : clearBttn.addEventListener('click', handleClearBttn);
-    })();
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
     const playerFactory = function (name, symbol) {
         return { name, symbol };
     };
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
     const gameBoardModule = (function () {
-        //grabs the elements and sets up event listeners
         const form = document.querySelector('.form-startBttn');
         let onceFlag = true;
         let player1Turn = true;
@@ -55,11 +23,6 @@ const mainApp = function () {
                 const _player2Symbol = (_d = formData.get('player2Symbol')) === null || _d === void 0 ? void 0 : _d.toString();
                 const player1 = playerFactory(_player1Name === '' ? 'Player 1' : _player1Name !== null && _player1Name !== void 0 ? _player1Name : '', _player1Symbol === '' ? 'X' : _player1Symbol !== null && _player1Symbol !== void 0 ? _player1Symbol : '');
                 const player2 = playerFactory(_player2Name === '' ? 'Player 2' : _player2Name !== null && _player2Name !== void 0 ? _player2Name : '', _player2Symbol === '' ? 'O' : _player2Symbol !== null && _player2Symbol !== void 0 ? _player2Symbol : '');
-                //
-                //
-                //
-                //
-                //
                 const renderGameBoard = (function () {
                     const gameBoard = document.querySelector('.gameBoard');
                     gameBoard === null || gameBoard === void 0 ? void 0 : gameBoard.style.setProperty('--grid-rows', '3');
@@ -76,33 +39,23 @@ const mainApp = function () {
                                 gameCell.removeEventListener('click', handleCellClick);
                         }
                     }
-                    //
-                    //
-                    //
-                    //
-                    //
                     function handleCellClick() {
-                        var _a;
+                        var _a, _b;
                         const cellKey = (_a = this.dataset.key) !== null && _a !== void 0 ? _a : '';
                         let winner = '';
                         let getWinner = '';
+                        let draw = '';
                         renderMove(cellKey, player1, player2);
                         if (!winnerGlobal) {
                             getWinner = checkWin(cellKey, scoreMap, cellsDataKeyPlayer1, cellsDataKeyPlayer2, player1Turn, player2Turn);
+                            draw = (_b = checkDraw()) !== null && _b !== void 0 ? _b : '';
                         }
                         if (getWinner === player1.symbol)
                             winner = `${player1.name}`;
                         if (getWinner === player2.symbol)
                             winner = `${player2.name}`;
-                        log(getWinner);
-                        if (winnerGlobal)
-                            announceWinner(winner);
+                        winnerGlobal ? announceWinner(winner) : announceWinner(draw);
                     }
-                    //
-                    //
-                    //
-                    //
-                    //
                     function renderMove(cellDataKey_, player1_, player2_) {
                         const gameCellCurrent = document.querySelector(`.gameCell[data-key='${cellDataKey_}']`);
                         const gameCellText = document.createElement('fieldset');
@@ -131,11 +84,6 @@ const mainApp = function () {
                             player2Turn = false;
                         }
                     }
-                    //
-                    //
-                    //
-                    //
-                    //
                     function checkWin(cellDataKey_, scoreMap_, cellsDataKeyPlayer1_, cellsDataKeyPlayer2_, player1Turn_, player2Turn_) {
                         var _a;
                         const winCondition = [
@@ -177,63 +125,37 @@ const mainApp = function () {
                         }, '');
                         return winner;
                     }
-                    //
-                    //
-                    //
-                    //
-                    //
+                    function checkDraw() {
+                        const fieldsetCells = document.querySelectorAll('.gameCellText');
+                        const fieldsetCellsArr = Array.from(fieldsetCells);
+                        if (fieldsetCellsArr.length === 9)
+                            return 'Draw';
+                    }
                     function announceWinner(winner_) {
                         const announceH2 = document.querySelector('.announce-winner');
-                        if (announceH2)
-                            announceH2.textContent =
-                                winner_ === ''
-                                    ? 'Click Restart to play again!'
-                                    : `Congrats! ${winner_} wins!`;
+                        if (announceH2) {
+                            if (winner_ === 'Draw')
+                                announceH2.textContent = `It's a tie! Go again!`;
+                            else if (winner_ === player1.name)
+                                announceH2.textContent = `Congrats! ${player1.name} wins!`;
+                            else if (winner_ === player2.name)
+                                announceH2.textContent = `Congrats! ${player2.name} wins!`;
+                            else if (winner_ === '' && winnerGlobal)
+                                announceH2.textContent = 'Click Restart to play again!';
+                        }
                     }
                 })();
-                //
-                //
-                //
             }
             onceFlag = false;
         }
-        //
-        //
-        //
         form === null || form === void 0 ? void 0 : form.addEventListener('submit', handleStartBttn);
     })();
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
+    const clearBoard = (function () {
+        const clearBttn = document.querySelector('.bttn-clear');
+        function handleClearBttn() {
+            window.location.reload();
+        }
+        clearBttn === null || clearBttn === void 0 ? void 0 : clearBttn.addEventListener('click', handleClearBttn);
+    })();
 };
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 document.addEventListener('DOMContentLoaded', mainApp);

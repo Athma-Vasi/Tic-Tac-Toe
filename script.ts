@@ -1,6 +1,4 @@
 const mainApp = function () {
-	const log = (i: unknown) => console.log('\n', i)
-
 	type Form = HTMLFormElement | null
 	type Div = HTMLDivElement | null
 	type Button = HTMLButtonElement | null
@@ -11,44 +9,11 @@ const mainApp = function () {
 		symbol: string
 	}
 
-	//
-	const clearBoard = (function () {
-		const clearBttn: Button = document.querySelector('.bttn-clear')
-
-		function handleClearBttn(this: HTMLButtonElement) {
-			window.location.reload()
-		}
-
-		clearBttn?.addEventListener('click', handleClearBttn)
-	})()
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-
 	const playerFactory = function (name: string, symbol: string) {
 		return { name, symbol }
 	}
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
+
 	const gameBoardModule = (function () {
-		//grabs the elements and sets up event listeners
 		const form: Form = document.querySelector('.form-startBttn')
 		let onceFlag = true
 		let player1Turn = true
@@ -78,12 +43,6 @@ const mainApp = function () {
 					_player2Symbol === '' ? 'O' : _player2Symbol ?? ''
 				)
 
-				//
-				//
-				//
-				//
-				//
-
 				const renderGameBoard = (function () {
 					const gameBoard: Div = document.querySelector('.gameBoard')
 
@@ -104,16 +63,11 @@ const mainApp = function () {
 						}
 					}
 
-					//
-					//
-					//
-					//
-					//
-
 					function handleCellClick(this: HTMLDivElement) {
 						const cellKey = this.dataset.key ?? ''
 						let winner = ''
 						let getWinner = ''
+						let draw = ''
 
 						renderMove(cellKey, player1, player2)
 
@@ -126,20 +80,15 @@ const mainApp = function () {
 								player1Turn,
 								player2Turn
 							)
+
+							draw = checkDraw() ?? ''
 						}
 
 						if (getWinner === player1.symbol) winner = `${player1.name}`
 						if (getWinner === player2.symbol) winner = `${player2.name}`
 
-						log(getWinner)
-						if (winnerGlobal) announceWinner(winner)
+						winnerGlobal ? announceWinner(winner) : announceWinner(draw)
 					}
-
-					//
-					//
-					//
-					//
-					//
 
 					function renderMove(cellDataKey_: string, player1_: Player, player2_: Player) {
 						const gameCellCurrent: Div = document.querySelector(
@@ -173,12 +122,6 @@ const mainApp = function () {
 							player2Turn = false
 						}
 					}
-
-					//
-					//
-					//
-					//
-					//
 
 					function checkWin(
 						cellDataKey_: string,
@@ -238,68 +181,44 @@ const mainApp = function () {
 						return winner
 					}
 
-					//
-					//
-					//
-					//
-					//
+					function checkDraw() {
+						const fieldsetCells: NodeListOf<HTMLFieldSetElement> =
+							document.querySelectorAll('.gameCellText')
+
+						const fieldsetCellsArr = Array.from(fieldsetCells)
+
+						if (fieldsetCellsArr.length === 9) return 'Draw'
+					}
 
 					function announceWinner(winner_: string) {
 						const announceH2: H2 = document.querySelector('.announce-winner')
-						if (announceH2)
-							announceH2.textContent =
-								winner_ === ''
-									? 'Click Restart to play again!'
-									: `Congrats! ${winner_} wins!`
+						if (announceH2) {
+							if (winner_ === 'Draw') announceH2.textContent = `It's a tie! Go again!`
+							else if (winner_ === player1.name)
+								announceH2.textContent = `Congrats! ${player1.name} wins!`
+							else if (winner_ === player2.name)
+								announceH2.textContent = `Congrats! ${player2.name} wins!`
+							else if (winner_ === '' && winnerGlobal)
+								announceH2.textContent = 'Click Restart to play again!'
+						}
 					}
 				})()
-				//
-				//
-				//
 			}
 			onceFlag = false
 		}
-		//
-		//
-		//
+
 		form?.addEventListener('submit', handleStartBttn)
 	})()
 
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
+	const clearBoard = (function () {
+		const clearBttn: Button = document.querySelector('.bttn-clear')
 
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
+		function handleClearBttn(this: HTMLButtonElement) {
+			window.location.reload()
+		}
+
+		clearBttn?.addEventListener('click', handleClearBttn)
+	})()
 }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 document.addEventListener('DOMContentLoaded', mainApp)
