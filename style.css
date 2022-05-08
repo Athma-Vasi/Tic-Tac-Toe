@@ -3,6 +3,17 @@
 	--grid-rows: '';
 	--margin: 2rem;
 	--padding: 2rem;
+	--clr-base: hsl(184.5, 38.46%, 59.22%);
+	--clr-base-shadowDark: hsl(184.5, 38.46%, 59.22%, 0.62);
+	--clr-base-dark: hsl(184.5, 14.6%, 14.6%);
+	--clr-base-text: hsl(184.5, 100%, 14.6%);
+	--clr-base-shadow: hsl(184.5, 100%, 14.6%, 0.38);
+	--clr-base-light: hsl(184.5, 100%, 97%);
+	--clr-comp: hsl(4, 38%, 59%);
+	--clr-split-comp1: hsl(257, 38%, 59%);
+	--clr-split-comp2: hsl(41, 38%, 59%);
+	--clr-tetra2: hsl(4, 38%, 59%);
+	--clr-tetra2-shadowLight: hsl(4, 38%, 59%, 0.38);
 }
 
 html {
@@ -21,6 +32,8 @@ html {
 
 .body {
 	font-size: 1rem;
+	background: var(--clr-base);
+	color: var(--clr-base-dark);
 }
 
 .container {
@@ -58,6 +71,17 @@ input {
 	margin: 0px 1rem 1rem 0px;
 	height: 3rem;
 	padding: 0.5rem;
+	color: var(--clr-base-text);
+	border-radius: 7px;
+	border: none;
+	outline: none;
+	background-color: var(--clr-base-light);
+}
+input:focus,
+input:hover,
+input:active {
+	outline: 1px solid var(--clr-base-text);
+	box-shadow: 1px 1px 1.6px 1.6px var(--clr-base-shadow);
 }
 
 #player1,
@@ -74,31 +98,56 @@ input {
 	margin: 0px 0px 1rem 0px;
 	width: 10rem;
 	height: 3rem;
+	border: none;
+	outline: none;
+	border-radius: 11px;
+	background-color: var(--clr-tetra2);
+	color: var(--clr-base-light);
+	font-size: 1.5rem;
+	font-weight: 600;
 }
 
 .gameBoard {
 	width: 500px;
 	height: 500px;
-	border: 1px solid black;
 	display: grid;
 	grid-template-columns: repeat(var(--grid-cols), 1fr);
 	grid-template-rows: repeat(var(--grid-rows), 1fr);
 }
 
 .gameCell {
-	border: 1px solid rebeccapurple;
-	background-color: antiquewhite;
+	border: 1px solid var(--clr-comp);
+	background-color: var(--clr-split-comp1);
 	display: grid;
 	place-content: center;
+	border-radius: 1rem;
+	box-shadow: 1px 1px 1.6px 1.6px var(--clr-base-shadow);
 }
 .gameCellText {
 	border: none;
 	outline: none;
-	color: teal;
+	color: var(--clr-split-comp2);
 	font-size: 6rem;
-	/* display: flex;
-	justify-content: center;
-	align-items: center; */
 	text-align: center;
 	padding: 36px 51px;
+}
+
+.announce-winner {
+	font-size: 3rem;
+}
+
+footer {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+p {
+	font-size: 1.5rem;
+	padding: 0px 5rem;
+}
+
+a {
+	text-decoration: none;
+	color: var(--clr-base-dark);
 }
