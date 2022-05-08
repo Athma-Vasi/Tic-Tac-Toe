@@ -2,7 +2,6 @@
 const mainApp = function () {
     const log = (i) => console.log('\n', i);
     //
-    const gameModule = function () { };
     //
     //
     //
@@ -34,7 +33,9 @@ const mainApp = function () {
         let onceFlag = true;
         let player1Turn = true;
         let player2Turn = false;
-        let cells = [];
+        const cellsDataKeyPlayer1 = [];
+        const cellsDataKeyPlayer2 = [];
+        const scoreMap = new Map();
         function handleStartBttn(ev) {
             var _a, _b, _c, _d;
             ev.preventDefault();
@@ -73,17 +74,22 @@ const mainApp = function () {
                     function handleCellClick() {
                         var _a;
                         const cellKey = (_a = this.dataset.key) !== null && _a !== void 0 ? _a : '';
-                        log(cellKey);
+                        let winner = '';
                         renderMove(cellKey, player1, player2);
-                        checkWin(cellKey, cells);
+                        const getWinner = checkWin(cellKey, scoreMap, cellsDataKeyPlayer1, cellsDataKeyPlayer2);
+                        if (getWinner === player1.symbol)
+                            winner = 'Player 1';
+                        if (getWinner === player2.symbol)
+                            winner = 'Player 2';
+                        log(winner);
                     }
                     //
                     //
                     //
                     //
                     //
-                    function renderMove(cellKey_, player1_, player2_) {
-                        const gameCellCurrent = document.querySelector(`.gameCell[data-key='${cellKey_}']`);
+                    function renderMove(cellDataKey_, player1_, player2_) {
+                        const gameCellCurrent = document.querySelector(`.gameCell[data-key='${cellDataKey_}']`);
                         const gameCellText = document.createElement('fieldset');
                         gameCellCurrent === null || gameCellCurrent === void 0 ? void 0 : gameCellCurrent.appendChild(gameCellText);
                         gameCellText.className = 'gameCellText';
@@ -113,9 +119,44 @@ const mainApp = function () {
                     //
                     //
                     //
-                    function checkWin(cellKey_, cells_) {
-                        cells_.push(cellKey_.split(','));
-                        log(cells_);
+                    function checkWin(cellDataKey_, scoreMap_, cellsDataKeyPlayer1_, cellsDataKeyPlayer2_) {
+                        var _a;
+                        const winCondition = [
+                            ['0,0', '0,1', '0,2'],
+                            ['1,0', '1,1', '1,2'],
+                            ['2,0', '2,1', '2,2'],
+                            ['0,0', '1,0', '2,0'],
+                            ['0,1', '1,1', '2,1'],
+                            ['0,2', '1,2', '2,2'],
+                            ['0,0', '1,1', '2,2'],
+                            ['2,0', '1,1', '0,2'],
+                        ];
+                        const gameCellCurrent = document.querySelector(`.gameCell[data-key='${cellDataKey_}']`);
+                        const symbol = (_a = gameCellCurrent === null || gameCellCurrent === void 0 ? void 0 : gameCellCurrent.textContent) !== null && _a !== void 0 ? _a : '';
+                        if (player1Turn) {
+                            cellsDataKeyPlayer1_.push(cellDataKey_);
+                            scoreMap_.set(symbol, cellsDataKeyPlayer1_);
+                        }
+                        else if (player2Turn) {
+                            cellsDataKeyPlayer2_.push(cellDataKey_);
+                            scoreMap_.set(symbol, cellsDataKeyPlayer2_);
+                        }
+                        const winner = winCondition.reduce((acc, curr) => {
+                            scoreMap_.forEach((value, key) => {
+                                let winner = false;
+                                const [winStr0, ...rest] = curr;
+                                const [winStr1, winStr2] = rest;
+                                if (value.includes(winStr0) &&
+                                    value.includes(winStr1) &&
+                                    value.includes(winStr2)) {
+                                    winner = true;
+                                }
+                                if (winner)
+                                    acc = key;
+                            });
+                            return acc;
+                        }, '');
+                        return winner;
                     }
                     //
                     //
