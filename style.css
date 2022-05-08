@@ -31,4 +31,17 @@ html {
 .gameCell {
 	border: 1px solid rebeccapurple;
 	background-color: antiquewhite;
+	display: grid;
+	place-content: center;
+}
+.gameCellText {
+	border: none;
+	outline: none;
+	color: teal;
+	font-size: 6rem;
+	/* display: flex;
+	justify-content: center;
+	align-items: center; */
+	text-align: center;
+	padding: 37.5px 57.5px;
 }
